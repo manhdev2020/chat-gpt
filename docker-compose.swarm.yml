@@ -1,0 +1,45 @@
+version: '3.3'
+
+services:
+  ecommerce-backend:
+    image: ecommerce-server:latest
+    ports:
+      - 8647:8000
+    depends_on:
+      - postgresql
+      - redis
+    env_file:
+      - .env
+    deploy:
+      mode: replicated
+      replicas: 6 
+      resources:
+        limits:
+          cpus: '1' # giới hạn số lượng CPU cho mỗi replica, tổng số lượng CPU sẽ là 2 * 3 = 6
+          memory: 200M # giới hạn bộ nhớ
+      restart_policy:
+        condition: on-failure
+
+  postgresql:
+    image: postgres
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=az123455
+      - POSTGRES_DB=ecommerce
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+    volumes:
+      - ./redisdata:/data
+
+volumes:
+  dbdata:
+  redisdata:

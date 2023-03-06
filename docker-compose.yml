@@ -1,0 +1,50 @@
+version: '3.7'
+
+services:
+  backend_service:
+    container_name: backend_service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      - redis
+      - mongo
+    restart: unless-stopped
+    environment:
+      NODE_ENV: DEVELOPMENT
+      PROJECT_NAME: chatGPT
+      PORT: 8000
+      DB_HOST: mongo
+      DB_PORT: 27017
+      DB_NAME: chatgpt
+      DB_USER: admin
+      DB_PASS: admin
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      CHATGPT_KEY: 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
+      CHATGPT_MODEL: gpt-3.5-turbo
+
+  mongo:
+      container_name: mongo
+      image: mongo:latest
+      ports:
+        - "27017:27017"
+      volumes:
+        - .docker/mongodata/db:/data/db
+        - .docker/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      restart: unless-stopped
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+    volumes:
+      - .docker/redisdata:/data
+
+volumes:
+  redisdata:
+  db:

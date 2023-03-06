@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <script>
+      window.onload = () => {
+        document.getElementById('loginButton').addEventListener('click', () => {
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+
+          fetch('http://127.0.0.1:8000/api/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({
+              account: email,
+              password: password,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((res) => res.json())
+            .then((res) => {
+              console.log('res : ', res);
+            })
+            .catch((err) => {
+              console.log('err : ', err);
+            });
+        });
+      };
+    </script>
+  </head>
+  <body>
+    <input id="email" type="text" placeholder="email" />
+    <input id="password" type="text" placeholder="password" />
+    <button id="loginButton">login</button>
+  </body>
+</html>
