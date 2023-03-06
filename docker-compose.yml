@@ -23,7 +23,7 @@ services:
       DB_PASS: admin
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      CHATGPT_KEY: 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
+      CHATGPT_KEY: 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
       CHATGPT_MODEL: gpt-3.5-turbo
 
   mongo:
